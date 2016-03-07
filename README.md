@@ -7,9 +7,10 @@ simple scripts for basic automation
 * This will clone the entire repositry on your local PC
 * ` To use xbing script:`
 * 1. chmod +x ~/XAutomation/xbing 
-* 2. gedit ~/.bash_profile
+* 2. sudo gedit ~/.bash_profile
 * 3. add this line after # User specific environment and startup programs
     * PATH=$PATH:$HOME/.local/bin:$HOME/XAutomation/
 * 4. save the ~/.bash_profile
-* 5. now open terminal and run the xbing
+* 5. Restart your machine 
+* 6. now open terminal and run the xbing
 
