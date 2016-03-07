@@ -3,37 +3,49 @@ import re,sys,os,commands,bs4,requests,urllib,argparse,random
 def main(args):
     num = 0
     if args.random:
-        num = random.randint(0,17)
+        num = random.randint(0,15)
+    
     home_dir = os.path.expanduser('~')
     dest_dir=home_dir+'/Pictures/bing/'
+    
     if not os.path.exists(dest_dir):
         os.mkdir(dest_dir)
+    
     if args.verbose:
         print 'Requesting and Parsing XML'
+
     soup = bs4.BeautifulSoup(requests.get('http://www.bing.com/HPImageArchive.aspx?format=xml&idx=%d&n=1&mkt=en-US'%(num)).text,'html.parser')
+    
     if args.verbose:
         print 'Extracting img url from XML'
+    
     link = str(soup.select('url')[0].get_text())
     info = soup.select('copyright')[0].get_text()
     print 'Image description: '+ info
+    
     if args.verbose:
         print 'Renaming Image'
+    
     img = re.search(r'\/az\/hprichbg\/rb\/(\S+\.jpg|png|tiff|jpeg|gif)',link)
     idx = os.path.join(dest_dir+img.group(1))
+    
     if args.verbose:
         print 'Checking if Image already there in Folder'
+    
     if not os.path.exists(idx):
         if args.verbose:
             print 'Downloading the image...'
         urllib.urlretrieve('https://bing.com'+link,idx)
+    
     if args.verbose:
         print 'Setting the Image......'
+    
     os.system("gsettings set org.gnome.desktop.background picture-uri file://%s"%(idx))
+    
     if args.verbose:
         print 'Done!' 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Extracting Random Bing Images')
-    #exgroup = parser.add_mutually_exclusive_group()
     parser.add_argument('-r','--random',action='store_true',help='Random image selection from last 15 days')
     parser.add_argument('-v','--verbose',action='store_true',help='To Show Downloading and Setting Process')
     args = parser.parse_args()
