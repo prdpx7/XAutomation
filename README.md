@@ -5,7 +5,7 @@ simple scripts for basic automation
 * `Pull entire repositry with`
 * **git clone https://github.com/zuck007/XAutomation.git**
 * This will clone the entire repositry on your local PC
-####To use xbing script:
+* ` To use xbing script:`
 * 1. chmod +x ~/XAutomation/xbing 
 * 2. gedit ~/.bash_profile
 * 3. add this line after # User specific environment and startup programs
