@@ -1,0 +1,11 @@
+#create the file ~/.bash_proflie
+#paste everything and follow the README.md
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+
+export PATH
