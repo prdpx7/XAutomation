@@ -2,15 +2,12 @@
 simple scripts for basic automation
 ---------
 * *all the working script are named as x[script-name]*
+* **xbing**
+     `xbing` * will extract random/current image from bing xml source and set that immage as a desktop background for linux OS.
+* **xshop**
+    `xshop` * will extract top 5 results from snapdeal and flipkart for a given search query in commandline args
+    
 * `Pull entire repositry with`
 * **git clone https://github.com/zuck007/XAutomation.git**
-* This will clone the entire repositry on your local PC
-* ` To use xbing script:`
-* 1. chmod +x ~/XAutomation/xbing 
-* 2. sudo gedit ~/.bash_profile
-* 3. add this line after # User specific environment and startup programs
-    * PATH=$PATH:$HOME/.local/bin:$HOME/XAutomation/
-* 4. save the ~/.bash_profile
-* 5. Restart your machine 
-* 6. now open terminal and run the xbing
+
 
