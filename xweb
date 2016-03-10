@@ -5,7 +5,7 @@ g='https://www.google.co.in/search?q='
 yt='https://www.youtube.com/results?search_query='
 wiki='https://en.wikipedia.org/wiki/'
 webdict = 'http://dictionary.reference.com/browse/'
-
+gmap = 'http://maps.google.com/?q='
 def list2str(var):
     return ' '.join(var)
 def openweb(url):
@@ -54,6 +54,9 @@ def main(args):
                 url = g + url
             if not re.search(r'^http(s)?:\/\/',url):
                 url='http://' + url
+    elif args.googlemap:
+        key = list2str(args.googlemap)
+        url = gmap + key
     elif args.google:
         key = list2str(args.google)
         url = g + key
@@ -80,12 +83,13 @@ if __name__ == '__main__':
     exgroup = parser.add_mutually_exclusive_group()
     parser.add_argument('default',nargs='*',help='directly open webpage if domain name is specified else will give google search result')
     exgroup.add_argument('-g','--google',nargs='+',help="open browser with google search result for given args")
-    exgroup.add_argument('-yt','--youtube',nargs='+',help="open browser youtube search result for given args")
+    exgroup.add_argument('-yt','--youtube',nargs='+',help="open browser with youtube search result for given args")
     exgroup.add_argument('-wk','--wiki',nargs='+',help='extract wikipedia search/page result for given args and display on terminal')
     exgroup.add_argument('-dict','--dictionary',type=str,help='extract dictionary definition for given word and display on terminal')
     parser.add_argument('-v','--verbose',action='store_true',help='display verbosity i.e description of given process')
     parser.add_argument('-o','--open',action='store_true',help='Open Webpage instead of displaying result on terminal; use with -wk/--wiki and -d/--dict')
     exgroup.add_argument('-t','--trend',help='extract trending news from internet')
+    exgroup.add_argument('-map','--googlemap',nargs='+',help='open browser with Google-Map search result')
     args = parser.parse_args()
     if len(sys.argv) ==1:
         print 'for help use -h or --help'
