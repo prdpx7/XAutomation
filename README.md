@@ -12,6 +12,6 @@ Simple scripts for basic automation
   * all of these script-code starts with the line `#!/usr/bin/env python` which should be executed with
     `$ chmod +x script-name`.
   * set up `PATH` for the directry containinng Exceutable scripts.
-  * To make it executable in Winodws click [here]{http://www.py2exe.org/index.cgi/Tutorial}.      
+  * To make it executable in Winodws click [here](http://www.py2exe.org/index.cgi/Tutorial).    
    
 
