@@ -110,7 +110,7 @@ def main(args):
       
 
 if __name__=='__main__': 
-    parser = argparse.ArgumentParser(description='Play any mp3 song according to song\'s tile,artist,genre etc.')
+    parser = argparse.ArgumentParser(description='Play any mp3 song according to song\'s title,artist,genre etc.')
     parser.add_argument('-g','--genre',type=str,help='play song of the given genre')
     parser.add_argument('-a','--artist',type=str,help='play song of the given artist')
     parser.add_argument('title',nargs='*',help='play song of the given title')
