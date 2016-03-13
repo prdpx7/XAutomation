@@ -100,7 +100,7 @@ def getmusicattr(args):
             #print 'artist found args.artist=%s artist=%s'%(args.artist,artist)
             return mpath,title,artist
 
-    return None,None
+    return None,None,None
 def main(args):
     path,title,artist= getmusicattr(args)
     if not path:
