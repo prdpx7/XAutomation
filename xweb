@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import re,bs4,sys,requests,webbrowser,time,argparse
+import os,re,bs4,sys,requests,time,argparse,subprocess
 
 g='https://www.google.co.in/search?q='
 yt='https://www.youtube.com/results?search_query='
@@ -9,7 +9,8 @@ gmap = 'http://maps.google.com/?q='
 def list2str(var):
     return ' '.join(var)
 def openweb(url):
-    webbrowser.open(url)
+    DEVNULL = open(os.devnull,'w')
+    subprocess.call(['xdg-open',url],stdout=DEVNULL,stderr=subprocess.STDOUT)
 
 def get_soup(args):
     return bs4.BeautifulSoup(requests.get(args).text,'html.parser')
