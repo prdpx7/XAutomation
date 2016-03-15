@@ -24,4 +24,8 @@ Simple scripts for basic automation
   * set up `PATH` for the directry containinng Exceutable scripts.
   * To make it executable in **Winodws** click [here](http://www.py2exe.org/index.cgi/Tutorial).    
    
+* **Packages/Modules**
+    * `pip install bs4` BeautifulSoup Module for Web-Elements extraction [docs](http://www.crummy.com/software/BeautifulSoup/).
+    * `pip install requests` click [here](http://docs.python-requests.org/en/master/) for py-docs
+    * `pip install mutagen` Read Meta-data from audio files [docs](https://mutagen.readthedocs.org/en/latest/).
 
