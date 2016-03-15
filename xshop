@@ -25,7 +25,26 @@ def show_amz(args):
     soup = get_src(amazon,args)
     if not soup:
         return None
-    title_link = soup.select(amz_title)    
+    title = []
+    ctr = 5
+    for name in soup.findAll(True,{'class':['a-size-base', 'a-color-null','s-inline' , 's-access-title', 'a-text-normal']}):
+        val = name.get('data-attribute') 
+        if val != None:
+            title.append(val)
+            ctr -= 1
+        if ctr == 0:
+            break
+
+    prices = []
+    ctr = 0
+    for pr in  soup.select('a.a-link-normal.a-text-normal > span.a-size-base.a-color-price.s-price.a-text-bold'):
+        x = re.findall(r'([\d\,\.]+)',str(pr.get_text))
+        print 'Amazon ->',title[ctr]+': ',x[3]
+        ctr += 1
+        if ctr==5:
+            break
+    
+
         
         
         
@@ -88,6 +107,10 @@ def main(args):
     show_flip(args)
     print '                        ----------------------------------------------------------------------------------------------------------------------------'
     show_snap(args) 
+    
+    print '                        ----------------------------------------------------------------------------------------------------------------------------'
+    show_amz(args)
+
     print '                        ----------------------------------------------------------------------------------------------------------------------------'
 if __name__ == '__main__':
     args = sys.argv[1:]
