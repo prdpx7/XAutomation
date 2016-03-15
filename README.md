@@ -6,8 +6,8 @@ Simple scripts for basic automation
 * **xbing** will extract random/current image from bing-xml source and set that image as GNOME desktop-background.
     [![asciicast](https://asciinema.org/a/cluwriwyhvvd491dxmurg8uoz.png)](https://asciinema.org/a/cluwriwyhvvd491dxmurg8uoz)
 
-* **xshop** will extract top 5 results from snapdeal and flipkart for a given search query in commandline args.
-    [![asciicast](https://asciinema.org/a/asxwhz3r45gzljueuuqi9cfw4.png)](https://asciinema.org/a/asxwhz3r45gzljueuuqi9cfw4)
+* **xshop** will extract top 5 results from Amazon,Snapdeal and Flipkart for a given search query in commandline args.
+   [![asciicast](https://asciinema.org/a/82fs8136fh0j8uit55tygb9zo.png)](https://asciinema.org/a/82fs8136fh0j8uit55tygb9zo)
 
 * **xweb** is loaded with numerous web scraping task such as getting wikipedia and dictionary results on terminal,opening google,youtube,google-map directly with given query in Commmand line args with args like --google,--youtube,--wiki,--dictionary etc.   
     [![asciicast](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn.png)](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn)
