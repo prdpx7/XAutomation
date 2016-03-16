@@ -39,18 +39,18 @@ def get_title(var):
 def get_artist(var):
     music = ID3(var)
     try:
-        val = str(music['TPE1'].text[0])
+        val = music['TPE1'].text[0]
     except:
         val = 'artistnotfound'
-    return str(val)
+    return val
 
 def get_genre(var):
     music = ID3(var)
     try:
-        val = str(music['TCON'].text[0])
+        val = music['TCON'].text[0]
     except:
         val = 'genrenotfound'
-    return str(val)
+    return val
 
 #to reduce nesting in getmusicattr function
 def get_nasty_artist(args,artist):
@@ -68,11 +68,14 @@ def get_nasty_genre(args,genre):
 def list2str(val):
     val = ' '.join(val)
     #print 'list2str',val
-    return str(val)
+    return val
 #size of set title > genre > artist
 def getmusicattr(args):
-    for musicfile in files:
+    for musicfile in sorted(files):
         mpath = os.path.abspath(os.path.join(musicdir,musicfile))
+        if not re.search(r'\.mp3',mpath):
+            print mpath,'is not mp3 format'
+            continue 
         title = get_title(mpath)
         artist = get_artist(mpath)
         genre = get_genre(mpath)
