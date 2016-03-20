@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+import os,re,bs4,sys,requests,time,argparse,subprocess
+
+g='https://www.google.co.in/search?q='
+yt='https://www.youtube.com/results?search_query='
+wiki='https://en.wikipedia.org/wiki/'
+webdict = 'http://dictionary.reference.com/browse/'
+gmap = 'http://maps.google.com/?q='
+def list2str(var):
+    return ' '.join(var)
+def openweb(url):
+    DEVNULL = open(os.devnull,'w')
+    subprocess.call(['xdg-open',url],stdout=DEVNULL,stderr=subprocess.STDOUT)
+
+def get_soup(args):
+    return bs4.BeautifulSoup(requests.get(args).text,'html.parser')
+
+#get dicitionary definition 
+def scrape_dict(args):
+    soup = get_soup(webdict+args)
+    print soup.select('.head-entry')[0].get_text().replace('\n','').title()
+    link = soup.select('.def-content')
+    for line in link:
+        print line.get_text().rstrip()
+        
+#open website from google search result    
+def scrape_google(key):
+    soup = get_soup(g + key.strip())
+    if not soup:
+        print 'Failed to load page'
+        sys.exit(1)
+    link = soup.select('.r a')
+    openweb(g + link[0].get('href') )
+    time.sleep(5)
+    
+#get wiki definition/first 10 lines from search result and display to terminal
+def scrape_wiki(key):    
+    soup = get_soup(wiki+key.strip())
+    data = soup.select('p')
+    ctr = 0
+    for line in data:
+        txt = line.get_text().rstrip()
+        rgx = re.compile(r'\[\d+\]')
+        print rgx.sub('',txt)
+        if ctr == 8:
+            break
+        ctr+=1
+
+#main utility
+def main(args):
+    if args.default:
+        url = list2str(args.default)
+        if url:
+            if not re.match(r'\S+\.(com|in|xyz|org)',url):
+                url = g + url
+            if not re.search(r'^http(s)?:\/\/',url):
+                url='http://' + url
+    elif args.googlemap:
+        key = list2str(args.googlemap)
+        url = gmap + key
+    elif args.google:
+        key = list2str(args.google)
+        url = g + key
+    elif args.youtube:
+        key = list2str(args.youtube)
+        url = yt + key
+    elif args.wiki:
+        key = list2str(args.wiki)
+        if args.open:
+            openweb(wiki+key)
+        else:
+            scrape_wiki(key)
+        return None
+    elif args.dictionary:
+        key = args.dictionary
+        if args.open:
+            openweb(webdict+key)
+        else:    
+            scrape_dict(key)
+        return None
+    openweb(url)   
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Terminal Utility to extract/open webpages')
+    exgroup = parser.add_mutually_exclusive_group()
+    parser.add_argument('default',nargs='*',help='directly open webpage if domain name is specified else will give google search result')
+    exgroup.add_argument('-g','--google',nargs='+',help="open browser with google search result for given args")
+    exgroup.add_argument('-yt','--youtube',nargs='+',help="open browser with youtube search result for given args")
+    exgroup.add_argument('-wk','--wiki',nargs='+',help='extract wikipedia search/page result for given args and display on terminal')
+    exgroup.add_argument('-dict','--dictionary',type=str,help='extract dictionary definition for given word and display on terminal') 
+    parser.add_argument('-o','--open',action='store_true',help='Open Webpage instead of displaying result on terminal; use with -wk/--wiki and -d/--dict')
+    exgroup.add_argument('-t','--trend',help='extract trending news from internet')
+    exgroup.add_argument('-map','--googlemap',nargs='+',help='open browser with Google-Map search result')
+    args = parser.parse_args()
+    if len(sys.argv) ==1:
+        print 'for help use -h or --help'
+    else:
+       main(args)

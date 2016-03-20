@@ -1,0 +1,121 @@
+#!/usr/bin/env python
+import os,subprocess,re,sys,argparse
+from mutagen.id3 import ID3
+homedir = os.path.expanduser('~')
+musicdir = homedir + '/Music/'
+try:
+    files = os.listdir(musicdir)
+except Exception as dir_except:
+    print dir_except
+
+#print files
+def play_music(musicfile,title,artist):
+    DEVNULL = open(os.devnull,'w')
+    subprocess.call(['xdg-open', musicfile],stdout=DEVNULL,stderr=subprocess.STDOUT)
+    print 'Playing ',title+' By '+artist
+
+'''
+mutagen.id3.ID3 attribute's:
+TPE1 [u'Pink Floyd']
+TENC [u'Exact Audio Copy   (Secure mode)']
+TDRC [u'2011']
+TIT2 [u'Hey You']
+COMM::eng [u'http://www.bubaneemusic.com/ \r\nhttp://www.thelocalbay.com/']
+TRCK [u'01']
+TLEN [u'280946']
+TPOS [u'1/1']
+TALB [u'The Best Of Pink Floyd - A Foot In The Door']
+TSSE [u'LAME.EXE -V 0 --vbr-new']
+TCON [u'Progressive Rock']
+'''
+def get_title(var):
+    music = ID3(var)
+    try:
+        val = str(music['TIT2'].text[0])
+    except:
+        val = 'titlenotfound'
+    return str(val)
+
+def get_artist(var):
+    music = ID3(var)
+    try:
+        val = music['TPE1'].text[0]
+    except:
+        val = 'artistnotfound'
+    return val
+
+def get_genre(var):
+    music = ID3(var)
+    try:
+        val = music['TCON'].text[0]
+    except:
+        val = 'genrenotfound'
+    return val
+
+#to reduce nesting in getmusicattr function
+def get_nasty_artist(args,artist):
+    if re.search(r'\b%s\b'%(args.artist), artist, re.IGNORECASE):
+        return True
+    else:
+        return False
+
+def get_nasty_genre(args,genre):
+    if re.search(r'\b%s\b'%(args.genre), genre, re.IGNORECASE):
+        return True
+    else:
+        return False
+
+def list2str(val):
+    val = ' '.join(val)
+    #print 'list2str',val
+    return val
+#size of set title > genre > artist
+def getmusicattr(args):
+    for musicfile in sorted(files):
+        mpath = os.path.abspath(os.path.join(musicdir,musicfile))
+        if not re.search(r'\.mp3',mpath):
+            print mpath,'is not mp3 format'
+            continue 
+        title = get_title(mpath)
+        artist = get_artist(mpath)
+        genre = get_genre(mpath)
+        #print title,artist,genre 
+        if args.title:
+            if re.search(r'\b%s\b'%list2str(args.title),title,re.IGNORECASE):
+                #print 'title found',title
+                if args.genre and get_nasty_genre(args, genre):
+                    if args.artist and get_nastry_artist(args, artist):
+                        return mpath,title,artist
+                    elif not args.artist:
+                        return mpath,title,artist
+                elif not args.genre:
+                    return mpath,title,artist
+        
+        elif args.genre and get_nasty_genre(args, genre):
+            #print 'genre found genre=%s args.genre=%s'%(genre,args.genre)
+            if args.artist and get_nasty_artist(args, artist):
+                #print 'artist found args.artist=%s artist=%s'%(args.artist,artist)
+                return mpath,title,artist
+            elif not args.artist:
+                return mpath,title,artist
+
+        elif args.artist and get_nasty_artist(args, artist): 
+            #print 'artist found args.artist=%s artist=%s'%(args.artist,artist)
+            return mpath,title,artist
+
+    return None,None,None
+def main(args):
+    path,title,artist= getmusicattr(args)
+    if not path:
+        print 'No match found for given query'
+        sys.exit(1)
+    play_music(path,title,artist)        
+      
+
+if __name__=='__main__': 
+    parser = argparse.ArgumentParser(description='Play any mp3 song according to song\'s title,artist,genre etc.')
+    parser.add_argument('-g','--genre',type=str,help='play song of the given genre')
+    parser.add_argument('-a','--artist',type=str,help='play song of the given artist')
+    parser.add_argument('title',nargs='*',help='play song of the given title')
+    args = parser.parse_args()
+    main(args)
