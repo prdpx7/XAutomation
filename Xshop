@@ -23,7 +23,6 @@ def get_src(site,args):
     soup = bs4.BeautifulSoup(req.text,"html.parser")
     return soup
     
-#incomplete
 def show_amz(args):
     res = 5
     amz_title = '.a-link-normal > .a-text-normal'
@@ -48,12 +47,7 @@ def show_amz(args):
         ctr += 1
         if ctr==5:
             break
-    
-
-        
-        
-        
-        
+                 
 def show_flip(args):
     flip_title = '.fk-display-block'
     soup = get_src(flipkart,args)
