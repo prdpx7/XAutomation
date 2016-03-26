@@ -36,7 +36,7 @@ def main(args):
     if not os.path.exists(idx):
         if args.verbose:
             print 'Downloading the image...'
-        urllib2.urlretrieve('https://bing.com'+link,idx)
+        urllib.urlretrieve('https://bing.com'+link,idx)
     
     if args.verbose:
         print 'Setting the Image......'
