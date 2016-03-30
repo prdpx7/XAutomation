@@ -51,7 +51,7 @@ def main(args):
     if args.default:
         url = list2str(args.default)
         if url:
-            if not re.match(r'\S+\.(com|in|xyz|org)',url):
+            if not re.match(r'\S+\.(co|in|xyz|org|com)\S*',url,re.IGNORECASE):
                 url = g + url
             if not re.search(r'^http(s)?:\/\/',url):
                 url='http://' + url
