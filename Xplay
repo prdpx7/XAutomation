@@ -3,6 +3,10 @@ import os,subprocess,re,sys,argparse
 from mutagen.id3 import ID3
 homedir = os.path.expanduser('~')
 musicdir = homedir + '/Music/'
+music_data = {}
+music_genre = {}
+query_artist = None
+query_genre = None
 try:
     files = os.listdir(musicdir)
 except Exception as dir_except:
@@ -69,8 +73,25 @@ def list2str(val):
     val = ' '.join(val)
     #print 'list2str',val
     return val
+def query_result(args):
+    artist = []
+    if not query_genre and not query_artist:
+        print "Query Failed"
+        return None
+    if args.genre:
+        artist.extend(music_genre[query_genre])
+        
+    elif args.artist:
+        artist.append(query_artist)
+        
+    for name in artist:
+        print "->",name
+        for song in music_data[name]:
+            print "---",song
+
 #size of set title > genre > artist
 def getmusicattr(args):
+    global music_data,music_genre,query_artist,query_genre
     for musicfile in sorted(files):
         mpath = os.path.abspath(os.path.join(musicdir,musicfile))
         if not re.search(r'\.mp3',mpath):
@@ -79,10 +100,15 @@ def getmusicattr(args):
         title = get_title(mpath)
         artist = get_artist(mpath)
         genre = get_genre(mpath)
-        #print title,artist,genre 
+        if not music_genre.has_key(genre):
+            music_genre[genre]=[]
+        if not music_data.has_key(artist):
+            music_data[artist]=[title]
+            music_genre[genre].append(artist)
+        else:
+            music_data[artist].append(title)
         if args.title:
             if re.search(r'\b%s\b'%list2str(args.title),title,re.IGNORECASE):
-                #print 'title found',title
                 if args.genre and get_nasty_genre(args, genre):
                     if args.artist and get_nastry_artist(args, artist):
                         return mpath,title,artist
@@ -92,20 +118,30 @@ def getmusicattr(args):
                     return mpath,title,artist
         
         elif args.genre and get_nasty_genre(args, genre):
-            #print 'genre found genre=%s args.genre=%s'%(genre,args.genre)
+            query_genre = genre
             if args.artist and get_nasty_artist(args, artist):
-                #print 'artist found args.artist=%s artist=%s'%(args.artist,artist)
-                return mpath,title,artist
+                if not args.query:
+                    return mpath,title,artist
+                else:
+                    query_artist = artist
             elif not args.artist:
+                if not args.query:
+                    return mpath,title,artist
+                else:
+                    query_artist = None
+
+        elif args.artist and get_nasty_artist(args, artist):
+            if not args.query:
                 return mpath,title,artist
-
-        elif args.artist and get_nasty_artist(args, artist): 
-            #print 'artist found args.artist=%s artist=%s'%(args.artist,artist)
-            return mpath,title,artist
-
+            else:
+                query_artist = artist
+    
     return None,None,None
 def main(args):
-    path,title,artist= getmusicattr(args)
+    path,title,artist = getmusicattr(args)
+    if args.query:
+        query_result(args)
+        sys.exit(1)
     if not path:
         print 'No match found for given query'
         sys.exit(1)
@@ -117,5 +153,7 @@ if __name__=='__main__':
     parser.add_argument('-g','--genre',type=str,help='play song of the given genre')
     parser.add_argument('-a','--artist',type=str,help='play song of the given artist')
     parser.add_argument('title',nargs='*',help='play song of the given title')
+    parser.add_argument('-q','--query',action='store_true',help='display result for query followed by artist/genre name.\n Example:\nXplay -a floyd -q will display all songs by artist floyd')
+
     args = parser.parse_args()
     main(args)

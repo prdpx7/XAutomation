@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os,re,bs4,sys,requests,time,argparse,subprocess,urllib,json
-
+url='https://encrypted.google.com'
 g='https://www.google.co.in/search?q='
 yt='https://www.youtube.com/'
 wiki='https://en.wikipedia.org/wiki/'
@@ -53,7 +53,7 @@ def delay_print(text):
         sys.stdout.flush()
         time.sleep(.01899)
 def main(args):
-    global g,yt,webdict,wiki,gmap
+    global g,yt,webdict,wiki,gmap,url
     if args.default:
         url = list2str(args.default)
         if url:
@@ -101,7 +101,9 @@ def main(args):
             if ctr == 5:
                 break
         return None    
-        
+    elif args.weather:
+        os.system('curl "http://wttr.in/%s"'%(args.weather))
+        return None
     openweb(url)   
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Terminal Utility to extract/open webpages')
@@ -114,6 +116,6 @@ if __name__ == '__main__':
     parser.add_argument('-o','--open',action='store_true',help='Open Webpage instead of displaying result on terminal; use with -wk/--wiki and -d/--dict')
     exgroup.add_argument('-map','--googlemap',type=str,help='open browser with Google-Map search result')
     exgroup.add_argument('-ud','--urbandict',nargs='+',help='definition from urbandictionary.com')
-
+    exgroup.add_argument('-w','--weather',type=str,help='display weather info for given city')
     args = parser.parse_args()  
     main(args)
