@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os,re,bs4,sys,requests,time,argparse,subprocess,urllib,json
+import os,re,bs4,sys,requests,time,argparse,subprocess,urllib,json,urllib2
 url='https://encrypted.google.com'
 g='https://www.google.co.in/search?q='
 yt='https://www.youtube.com/'
@@ -15,15 +15,24 @@ def openweb(url):
 def get_soup(args):
     return bs4.BeautifulSoup(requests.get(args).text,'html.parser')
 
-#get dicitionary definition 
+#get dicitionary definition
+#scraping from html src
+
 def scrape_dict(args):
     soup = get_soup(webdict+args)
     print soup.select('.head-entry')[0].get_text().replace('\n','').title()
     link = soup.select('.def-content')
     for line in link:
         print line.get_text().rstrip()
-        
-#open website from google search result    
+
+#open website from google search result
+'''
+def json_dict(args):
+    src='https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=%s&pretty=true'%(args)
+    data=json.loads(urllib2.urlopen(src).read())
+    print data
+'''
+
 def scrape_google(key):
     soup = get_soup(g + key.strip())
     if not soup:
@@ -32,9 +41,11 @@ def scrape_google(key):
     link = soup.select('.r a')
     openweb(g + link[0].get('href') )
     time.sleep(5)
-    
+
 #get wiki definition/first 10 lines from search result and display to terminal
-def scrape_wiki(key):    
+def scrape_wiki(key):
+    src=urllib.urlopen(wiki+key.strip())
+
     soup = get_soup(wiki+key.strip())
     data = soup.select('p')
     ctr = 0
@@ -46,12 +57,13 @@ def scrape_wiki(key):
             break
         ctr+=1
 
-#main utility
 def delay_print(text):
     for  i in text:
         sys.stdout.write(i)
         sys.stdout.flush()
         time.sleep(.01899)
+
+#main utility
 def main(args):
     global g,yt,webdict,wiki,gmap,url
     if args.default:
@@ -81,9 +93,9 @@ def main(args):
         key = args.dictionary
         if args.open:
             openweb(webdict+key)
-        else:    
+        else:
             scrape_dict(key)
-        return None    
+        return None
     elif args.urbandict:
         key = list2str(args.urbandict)
         url = 'http://api.urbandictionary.com/v0/define?term='+key
@@ -100,11 +112,11 @@ def main(args):
             ctr += 1
             if ctr == 5:
                 break
-        return None    
+        return None
     elif args.weather:
         os.system('curl "http://wttr.in/%s"'%(args.weather))
         return None
-    openweb(url)   
+    openweb(url)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Terminal Utility to extract/open webpages')
     exgroup = parser.add_mutually_exclusive_group()
@@ -112,10 +124,10 @@ if __name__ == '__main__':
     exgroup.add_argument('-g','--google',type=str,help="open browser with google search result for given args")
     exgroup.add_argument('-yt','--youtube',nargs='+',help="open browser with youtube search result for given args")
     exgroup.add_argument('-wk','--wiki',type=str,help='extract wikipedia search/page result for given args and display on terminal')
-    exgroup.add_argument('-dict','--dictionary',type=str,help='extract dictionary definition for given word and display on terminal') 
+    exgroup.add_argument('-dict','--dictionary',type=str,help='extract dictionary definition for given word and display on terminal')
     parser.add_argument('-o','--open',action='store_true',help='Open Webpage instead of displaying result on terminal; use with -wk/--wiki and -d/--dict')
     exgroup.add_argument('-map','--googlemap',type=str,help='open browser with Google-Map search result')
     exgroup.add_argument('-ud','--urbandict',nargs='+',help='definition from urbandictionary.com')
     exgroup.add_argument('-w','--weather',type=str,help='display weather info for given city')
-    args = parser.parse_args()  
+    args = parser.parse_args()
     main(args)

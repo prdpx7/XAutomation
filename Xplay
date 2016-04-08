@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os,subprocess,re,sys,argparse
+import os,subprocess,re,sys,argparse,random
 from mutagen.id3 import ID3
 homedir = os.path.expanduser('~')
 musicdir = homedir + '/Music/'
@@ -11,6 +11,7 @@ try:
     files = os.listdir(musicdir)
 except Exception as dir_except:
     print dir_except
+    sys.exit(1)
 
 #print files
 def play_music(musicfile,title,artist):
@@ -58,13 +59,13 @@ def get_genre(var):
 
 #to reduce nesting in getmusicattr function
 def get_nasty_artist(args,artist):
-    if re.search(r'\b%s\b'%(args.artist), artist, re.IGNORECASE):
+    if re.search(r'\b%s\b'%list2str(args.artist), artist, re.IGNORECASE):
         return True
     else:
         return False
 
 def get_nasty_genre(args,genre):
-    if re.search(r'\b%s\b'%(args.genre), genre, re.IGNORECASE):
+    if re.search(r'\b%s\b'%list2str(args.genre), genre, re.IGNORECASE):
         return True
     else:
         return False
@@ -135,7 +136,7 @@ def getmusicattr(args):
                 return mpath,title,artist
             else:
                 query_artist = artist
-    
+        
     return None,None,None
 def main(args):
     path,title,artist = getmusicattr(args)
@@ -149,11 +150,17 @@ def main(args):
       
 
 if __name__=='__main__': 
-    parser = argparse.ArgumentParser(description='Play any mp3 song according to song\'s title,artist,genre etc.')
-    parser.add_argument('-g','--genre',type=str,help='play song of the given genre')
-    parser.add_argument('-a','--artist',type=str,help='play song of the given artist')
-    parser.add_argument('title',nargs='*',help='play song of the given title')
-    parser.add_argument('-q','--query',action='store_true',help='display result for query followed by artist/genre name.\n Example:\nXplay -a floyd -q will display all songs by artist floyd')
-
+    parser = argparse.ArgumentParser(description='Play any mp3 song according to song\'s title,artist,genre etc.',epilog='Just Type Xplay without any argument for random song selection')
+    parser.add_argument('-g','--genre',nargs='+',help='play song of the given genre')
+    parser.add_argument('-a','--artist',nargs='+',help='play song of the given artist')
+    parser.add_argument('-t','--title',nargs='+',help='play song of the given title')
+    parser.add_argument('-q','--query',action='store_true',help='display result for query followed by artist/genre name.')
+    
     args = parser.parse_args()
-    main(args)
+    if args.title or args.genre or args.query or args.artist:
+        main(args)
+    else:
+        #shuffle
+        songpath = os.path.abspath(os.path.join(musicdir,random.choice(files)))
+        play_music(songpath,get_title(songpath),get_artist(songpath))
+        
