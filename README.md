@@ -32,3 +32,4 @@ Automation Scripts for Regular Tasks
     * `pip install mutagen` [Mutagen Module](https://mutagen.readthedocs.org/en/latest/) for reading Meta-data from mp3 files.
 
 ## LICENCE
+ [GNU GPL v3](https://github.com/zuck007/XAutomation/blob/master/LICENSE)
