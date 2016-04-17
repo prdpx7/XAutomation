@@ -1,0 +1,107 @@
+#!/bin/bash
+
+path=$HOME"/.XAutomation/CodeTemplates/"
+
+function show_usage()
+{
+echo '
+Usage: [-h] [-c COMPILE] [-s SET-TEMPLATE] [-g GENERATE-TEMPLATE]
+
+Xcode is Universal Compiler & Code Template Generator and its not related to that OSX IDE !
+
+Optional Arguments:
+   -h , --help : show this help message and exit
+
+   -c COMPILE , --compile COMPILE : compile the given file w.r.t  extension
+    
+   -s SET-TEMPLATE , --set-template SET-TEMPLATE : replace default CodeTemplate file with given file
+    
+   -g GENERATE-TEMPLATE , --generate-template GENERATE-TEMPLATE : copy default code template with given name w.r.t file extension in current directory 
+
+Examples:
+1. Xcode -h 
+<show this whole message>
+2. Xcode --compile gcd.c
+<compile this file & genrate object code with name gcd>
+<i.e gcc gcd.c -o gcd >
+3. Xcode --set-template ~/MyTemplates/defaulttemp.cpp
+< replace default CPPtemplate.cpp with given file >
+4. Xcode -g  modexp.py
+< create new file modexp.py and copy all contents of default python template into it.>
+'
+}
+
+#utility
+
+function xcode_compiler()
+{
+    case $FILE in 
+        *.py) python $FILE ;;
+        *.c) gcc $FILE -o ${FILE%.*} ;; # gcc somefile.c -o somefile
+        *.cpp) g++ $FILE -o  ${FILE%.*} ;;
+        *.java) javac $FILE ;;
+        *.rb) ruby $FILE ;;
+    esac 
+}
+
+function generate_template()
+{
+    case $FILE in
+    *.c) cp "$path"Ctemplate.c          $FILE  ;;
+    *.cpp) cp "$path"CPPtemplate.cpp     $FILE ;;
+    *.py) cp "$path"Pytemplate.py        $FILE ;;
+    *.java) cp "$path"Javatemplate.java  $FILE 
+        var=${FILE%.*}
+        sed  -i -e "s/Javatemplate/$var/1" $FILE  #public class name & filename must be same
+        ;;
+    *.rb) cp "$path"Rbtemplate.rb        $FILE ;;
+    esac
+}
+function is_exist()
+{
+    if [ ! -f "$FILE" ];then
+        echo "Not a valid path/file"
+        exit 1
+    fi    
+}
+function set_template()
+{
+    case $FILE in 
+    *.c)   cp $FILE "$path"Ctemplate.c ;;
+    *.cpp) cp $FILE "$path"CPPtemplate.cpp ;;
+    *.py)  cp $FILE "$path"Pytemplate.py ;;
+    *.rb)  cp $FILE "$path"Rbtemplate.rb ;;
+    *.java)cp $FILE "$path"Javatemplate.java 
+        var=${FILE%.*} 
+        sed -i -e "s/$var/Javatemplate/1" "$path"Javatemplate.java  #public class name & filename must be same
+        ;;
+    esac  
+}
+
+#arg-parsing
+case $1 in
+    -h | --help)
+        show_usage  
+        exit 0
+        ;;
+    -c | --compile)
+        FILE=$2
+        is_exist $FILE
+        xcode_compiler $FILE
+        ;;
+    -s | --set-template)
+        FILE=$2
+        is_exist $FILE  
+        set_template $FILE
+        ;;
+    -g | --generate-template)   
+        if [ -z $2 ];then
+            echo "atleast provide name for the program"
+            exit 1
+        fi
+        FILE=$2
+        generate_template $FILE    
+        ;;
+    *)echo "for more info use -h | --help "
+        exit 0
+esac    
