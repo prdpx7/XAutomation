@@ -8,7 +8,8 @@ Automation Scripts for Regular Tasks
 
 #### Xcode
 * Its a compiler(not a real one but using existing commands for compilation) + code template generator for C,C++,Python,Java & Ruby.
-[![asciicast](https://asciinema.org/a/42611.png)](https://asciinema.org/a/42611) 
+[![asciicast](https://asciinema.org/a/42611.png)](https://asciinema.org/a/42611)
+
 #### Xplay
 * A terminal/CLI utility to play any song in your music directory with filter like title, --artist, --genre.
     [![asciicast](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td.png)](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td)
