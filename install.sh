@@ -1,5 +1,5 @@
 #cloning repo to local machine
-#git clone https://github.com/zuck007/XAutomation.git ~/.XAutomation
+git clone https://github.com/zuck007/XAutomation.git ~/.XAutomation
 #color-codes
 REDD=`tput setaf 1`
 GREN=`tput setaf 2`
@@ -66,6 +66,6 @@ function postinstall()
 
 }
 preinstall
-#justdoit
+justdoit
 postinstall
 printf "\n\n ${BLUE} X[script-name] --help for detailed args and instructions"
