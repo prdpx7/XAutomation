@@ -1,9 +1,17 @@
 # XAutomation
 Automation Scripts for Regular Tasks
 ------
+
 #### Xbing
 * Extract random/current image from Bing-JSON source and set that image as desktop-background.
    [![asciicast](https://asciinema.org/a/41864.png)](https://asciinema.org/a/41864)
+
+#### Xcode
+* Its a compiler(not a real one but using existing commands for compilation) + code template generator for C,C++,Python,Java & Ruby.
+[![asciicast](https://asciinema.org/a/42611.png)](https://asciinema.org/a/42611) 
+#### Xplay
+* A terminal/CLI utility to play any song in your music directory with filter like title, --artist, --genre.
+    [![asciicast](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td.png)](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td)
 
 #### Xshop
 * This will extract top 5 results from Amazon,Snapdeal and Flipkart for a given search query in CLI.
@@ -11,22 +19,17 @@ Automation Scripts for Regular Tasks
 
 #### Xweb
 * It is loaded with numerous web scraping task such as getting wikipedia and dictionary results on terminal,opening google,youtube,google-map directly with given query in Commmand line args with args like --google,--youtube,--wiki,--dictionary etc.   
-    [![asciicast](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn.png)](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn)
+ [![asciicast](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn.png)](https://asciinema.org/a/3ga9yfom6afi7j6xhnjkfddrn)
 
-#### Xplay
-* A terminal/CLI utility to play any song in your music directory with filter like title, --artist, --genre.
-    [![asciicast](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td.png)](https://asciinema.org/a/3mrqtrmkfcjhqet3f4mz4l3td)
-* **Pull entire repositry with:**
- `git clone https://github.com/zuck007/XAutomation.git`
 
 ## Installation
-  * all of these script-code starts with the line `#!/usr/bin/env python`, which should be executed with
-    * `$ chmod +x script-name`.
-  * set up `PATH` for the directry containing Executable scripts.
+* Copy and paste this line on terminal (Bash version >4.0).
 
   ``
-  $ export PATH="/home/username/dir/to/XAutomation/
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/zuck007/XAutomation/master/install.sh)"
   ``
+
+    [![asciicast](https://asciinema.org/a/42608.png)](https://asciinema.org/a/42608)
 
 * **Packages/Modules**
     * `pip install bs4` [BeautifulSoup Module](http://www.crummy.com/software/BeautifulSoup/) for Web-Scraping.
