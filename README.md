@@ -3,7 +3,7 @@ Automation Scripts for Regular Tasks
 ------
 #### Xbing
 * Extract random/current image from Bing-JSON source and set that image as desktop-background.
-    [![asciicast](https://asciinema.org/a/cluwriwyhvvd491dxmurg8uoz.png)](https://asciinema.org/a/cluwriwyhvvd491dxmurg8uo)
+   [![asciicast](https://asciinema.org/a/41864.png)](https://asciinema.org/a/41864)
 
 #### Xshop
 * This will extract top 5 results from Amazon,Snapdeal and Flipkart for a given search query in CLI.
