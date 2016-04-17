@@ -1,5 +1,6 @@
 from fractions import gcd
 import os,sys,math,random,time,json,argparse
+
 def lcm():
     pass
     
