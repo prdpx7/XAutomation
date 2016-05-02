@@ -5,8 +5,8 @@ def main(args):
     if args.random:
         num = random.randint(0,15)
     
-    home_dir = os.path.expanduser('~')
-    dest_dir=home_dir+'/Pictures/bing/'
+    user = os.getenv('USER')
+    dest_dir='/home/'+user+'/Pictures/bing/'
     
     if not os.path.exists(dest_dir):
         os.mkdir(dest_dir)
