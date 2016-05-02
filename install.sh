@@ -25,6 +25,10 @@ function preinstall()
 function justdoit()
 {
 
+    echo "Installing packages used X[scripts] like bs4,requests,mutagen"
+    sudo pip install bs4
+    sudo pip install requests
+    sudo pip install mutagen
 printf "\n${GREN}Configuring ~/.bashrc & setting aliases for Xscript\n"
 
     CONFIG_FILE="$HOME/.bashrc"
