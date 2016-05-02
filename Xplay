@@ -95,9 +95,13 @@ def getmusicattr(args):
     global music_data,music_genre,query_artist,query_genre
     for musicfile in sorted(files):
         mpath = os.path.abspath(os.path.join(musicdir,musicfile))
-        if not re.search(r'\.mp3',mpath):
-            print mpath,'is not mp3 format'
-            continue 
+        
+        if not re.search(r'\.mp3',musicfile):
+            if args.title and re.search(r'\b%s\b'%list2str(args.title),musicfile,re.IGNORECASE):
+                return mpath,musicfile,'Unknown'
+            else:
+                continue
+
         title = get_title(mpath)
         artist = get_artist(mpath)
         genre = get_genre(mpath)
@@ -115,7 +119,9 @@ def getmusicattr(args):
                         return mpath,title,artist
                     elif not args.artist:
                         return mpath,title,artist
-                elif not args.genre:
+                elif args.artist and get_nasty_artist(args, artist):
+                    return mpath,title,artist
+                elif not args.artist and not args.genre:
                     return mpath,title,artist
         
         elif args.genre and get_nasty_genre(args, genre):
