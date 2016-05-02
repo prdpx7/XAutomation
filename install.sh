@@ -1,5 +1,7 @@
 #cloning repo to local machine
-git clone https://github.com/zuck007/XAutomation.git ~/.XAutomation
+if [ ! -d /home/$USER/.XAutomation ];then
+    git clone https://github.com/zuck007/XAutomation.git /home/$USER/.XAutomation
+fi
 #color-codes
 REDD=`tput setaf 1`
 GREN=`tput setaf 2`
@@ -23,7 +25,7 @@ function preinstall()
 function justdoit()
 {
 
-printf "\n ${GREN} Configuring ~/.bashrc & setting aliases for Xscript\n"
+printf "\n${GREN}Configuring ~/.bashrc & setting aliases for Xscript\n"
 
     CONFIG_FILE="$HOME/.bashrc"
     if [ ! -f $CONFIG_FILE ];then
@@ -33,11 +35,15 @@ printf "\n ${GREN} Configuring ~/.bashrc & setting aliases for Xscript\n"
         echo "    . /etc/bashrc" >> $CONFIG_FILE
         echo 'fi' >> $CONFIG_FILE
     fi
-    echo '#XAutomation Aliases ' >> $CONFIG_FILE
-    for xname in ~/.XAutomation/X*;
+    if ! grep -q "#XAutomation Aliases " $CONFIG_FILE;
+    then
+        echo '#XAutomation Aliases ' >> $CONFIG_FILE
+    fi
+    for xname in /home/$USER/.XAutomation/X*;
     do
         cmd=$(echo $xname | cut -d '/' -f5 )  #5th field for command name
-        echo "alias $cmd=\"$xname\"" >> $CONFIG_FILE
+        env_var=$(echo "alias $cmd=\"$xname\"")
+        if ! grep -q "$env_var" $CONFIG_FILE ; then echo "$env_var" >> $CONFIG_FILE ; fi
         echo "Setting alias $cmd in $CONFIG_FILE"
     done
 }
