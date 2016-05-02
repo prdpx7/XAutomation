@@ -61,7 +61,7 @@ def delay_print(text):
     for  i in text:
         sys.stdout.write(i)
         sys.stdout.flush()
-        time.sleep(.01899)
+        time.sleep(.01599)
 
 #main utility
 def main(args):
@@ -77,7 +77,7 @@ def main(args):
         key = args.googlemap
         url = gmap + key
     elif args.google:
-        key = args.google
+        key = list2str(args.google)
         url = g + key
     elif args.youtube:
         key = ' '.join(args.youtube)
@@ -110,7 +110,7 @@ def main(args):
             delay_print( res["example"])
             print "\n"
             ctr += 1
-            if ctr == 5:
+            if ctr == 3:
                 break
         return None
     elif args.weather:
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Terminal Utility to extract/open webpages')
     exgroup = parser.add_mutually_exclusive_group()
     parser.add_argument('default',nargs='*',help='directly open webpage if domain name is specified else will give google search result')
-    exgroup.add_argument('-g','--google',type=str,help="open browser with google search result for given args")
+    exgroup.add_argument('-g','--google',nargs='+',help="open browser with google search result for given args")
     exgroup.add_argument('-yt','--youtube',nargs='+',help="open browser with youtube search result for given args")
     exgroup.add_argument('-wk','--wiki',type=str,help='extract wikipedia search/page result for given args and display on terminal')
     exgroup.add_argument('-dict','--dictionary',type=str,help='extract dictionary definition for given word and display on terminal')
