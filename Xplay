@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os,subprocess,re,sys,argparse,random
 from mutagen.id3 import ID3
+import mutagen.mp4
 homedir = os.path.expanduser('~')
 musicdir = homedir + '/Music/'
 music_data = {}
@@ -34,27 +35,48 @@ TSSE [u'LAME.EXE -V 0 --vbr-new']
 TCON [u'Progressive Rock']
 '''
 def get_title(var):
-    music = ID3(var)
-    try:
-        val = str(music['TIT2'].text[0])
-    except:
-        val = 'titlenotfound'
-    return str(val)
+    if re.search(r'mp3',var):
+        music = ID3(var)
+        try:
+            val = str(music['TIT2'].text[0])
+        except:
+            val = os.path.basename(var)
+    else:
+        music = mutagen.mp4.MP4(var)
+        try:
+            val = music['\xa9nam'][0]
+        except:
+            val = os.path.basename(var)
+    return val
 
 def get_artist(var):
-    music = ID3(var)
-    try:
-        val = music['TPE1'].text[0]
-    except:
-        val = 'artistnotfound'
+    if re.search(r'mp3',var):
+        music = ID3(var)
+        try:
+            val = music['TPE1'].text[0]
+        except:
+            val = 'artistnotfound'
+    else:
+        music = mutagen.mp4.MP4(var)
+        try:
+            val = music['\xa9ART'][0]
+        except:
+            val = 'artistnotfound'
     return val
 
 def get_genre(var):
-    music = ID3(var)
-    try:
-        val = music['TCON'].text[0]
-    except:
-        val = 'genrenotfound'
+    if re.search(r'mp3',var):
+        music = ID3(var)
+        try:
+            val = music['TCON'].text[0]
+        except:
+            val = 'genrenotfound'
+    else:
+        music = mutagen.mp4.MP4(var)
+        try:
+            val = music['\xa9gen'][0]
+        except:
+            val = 'genrenotfound'      
     return val
 
 #to reduce nesting in getmusicattr function
@@ -96,7 +118,7 @@ def getmusicattr(args):
     for musicfile in sorted(files):
         mpath = os.path.abspath(os.path.join(musicdir,musicfile))
         
-        if not re.search(r'\.mp3',musicfile):
+        if not re.search(r'\.(mp3|m4a)',musicfile,re.IGNORECASE):
             if args.title and re.search(r'\b%s\b'%list2str(args.title),musicfile,re.IGNORECASE):
                 return mpath,musicfile,'Unknown'
             else:
