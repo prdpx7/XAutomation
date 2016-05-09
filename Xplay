@@ -2,6 +2,8 @@
 import os,subprocess,re,sys,argparse,random
 from mutagen.id3 import ID3
 import mutagen.mp4
+reload(sys)
+sys.setdefaultencoding('utf-8')
 homedir = os.path.expanduser('~')
 musicdir = homedir + '/Music/'
 music_data = {}
