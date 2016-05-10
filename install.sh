@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 #cloning repo to local machine
 if [ ! -d /home/$USER/.XAutomation ];then
     git clone https://github.com/zuck007/XAutomation.git /home/$USER/.XAutomation
