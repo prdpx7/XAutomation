@@ -27,7 +27,7 @@ Automation Scripts for Regular Tasks
 * Copy and paste this line on terminal (Bash version >4.0).
 
   ``
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/zuck007/XAutomation/master/install.sh)"
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/zuck007/XAutomation/master/install.sh)"
   ``
 
     [![asciicast](https://asciinema.org/a/42608.png)](https://asciinema.org/a/42608)
