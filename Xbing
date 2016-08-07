@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import re,sys,os,json,urllib2,urllib,argparse,random
+
+
 def main(args):
     num = 0
     if args.random:
@@ -14,28 +16,28 @@ def main(args):
     if args.verbose:
         print 'Requesting and Parsing JSON'
     try:
-        src_json = urllib2.urlopen('http://www.bing.com/HPImageArchive.aspx?format=js&idx=%d&n=1&mkt=en-US'%(num)).read()
+        src_json = urllib.urlopen('http://www.bing.com/HPImageArchive.aspx?format=js&idx=%d&n=1&mkt=en-US'%(num)).read()
     except  Exception as ex:
         print ex
         sys.exit(1)
-
+    
     src = json.loads(src_json)
     
     if args.verbose:
         print 'Extracting img url from Bing-JSON API'
     
     link = src['images'][0]['url']
-    info = src['images'][0]['copyright']
+
+    #print json.dumps(src,sort_keys=True,indent=4)
     if not args.quiet:
-        print 'Image description: '+ info
+        print 'Image description: '+ src['images'][0]['copyright']
     
     if args.verbose:
         print 'Renaming Image'
     
     img = re.search(r'\/az\/hprichbg\/rb\/(\w+)_EN\S+(\.jpg|png|tiff|jpeg|gif)',link)
-    img_name= img.group(1)+img.group(2)
-    
-    idx = os.path.join(dest_dir+img_name)
+    img_name= img.group(1)+img.group(2) 
+    idx = dest_dir+img_name
     
     if args.verbose:
         print 'Checking if Image already there in Folder'
@@ -43,13 +45,14 @@ def main(args):
     if not os.path.exists(idx):
         if args.verbose:
             print 'Downloading the image...'
-        urllib.urlretrieve('https://bing.com'+link,idx)
+        urllib.urlretrieve('http://bing.com'+link,idx)
     
     if args.verbose:
         print 'Setting the Image......'
     
-    os.system("gsettings set org.gnome.desktop.background picture-uri file://%s"%(idx))
+    os.system("gsettings set org.gnome.desktop.background picture-uri file://%s"%(idx))    
     
+
     if args.verbose:
         print 'Done!' 
 if __name__ == '__main__':
