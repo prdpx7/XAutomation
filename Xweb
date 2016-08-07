@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os,re,bs4,sys,requests,time,argparse,subprocess,urllib,json,urllib2
+import os, re, bs4, sys, requests, time, argparse, subprocess, urllib, json, urllib2, pyperclip
 url='https://encrypted.google.com'
 g='https://www.google.co.in/search?q='
 yt='https://www.youtube.com/'
@@ -116,6 +116,17 @@ def main(args):
     elif args.weather:
         os.system('curl "http://wttr.in/%s"'%(args.weather))
         return None
+    elif args.shortner:
+        BITLY_TOKEN = os.getenv("BITLY_ACCESS_TOKEN")
+        url = args.shortner
+        if not re.search("http",url):
+            url = "http://" + url
+        url = "https://api-ssl.bitly.com/v3/shorten?access_token=%s&longUrl=%s&format=txt"%(BITLY_TOKEN,url)
+        short_url = urllib.urlopen(url).read().strip("\n")
+        pyperclip.copy(short_url)
+        print "given short url copied to the clipboard"
+        print short_url
+        return None
     openweb(url)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Terminal Utility to extract/open webpages')
@@ -129,5 +140,6 @@ if __name__ == '__main__':
     exgroup.add_argument('-map','--googlemap',type=str,help='open browser with Google-Map search result')
     exgroup.add_argument('-ud','--urbandict',nargs='+',help='definition from urbandictionary.com')
     exgroup.add_argument('-w','--weather',type=str,help='display weather info for given city')
+    exgroup.add_argument('-s','--shortner',type=str, help="Shortene urls with bit.ly")
     args = parser.parse_args()
     main(args)
