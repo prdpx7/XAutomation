@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os,subprocess,re,sys,argparse,random
+import os,subprocess,re,sys,argparse,random,argcomplete
 from mutagen.id3 import ID3
 import mutagen.mp4
 reload(sys)
