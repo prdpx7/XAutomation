@@ -38,14 +38,14 @@ TCON [u'Progressive Rock']
 '''
 def get_title(var):
     if re.search(r'mp3',var):
-        music = ID3(var)
         try:
+            music = ID3(var)
             val = str(music['TIT2'].text[0])
         except:
             val = os.path.basename(var)
     else:
-        music = mutagen.mp4.MP4(var)
         try:
+            music = mutagen.mp4.MP4(var)
             val = music['\xa9nam'][0]
         except:
             val = os.path.basename(var)
@@ -53,14 +53,14 @@ def get_title(var):
 
 def get_artist(var):
     if re.search(r'mp3',var):
-        music = ID3(var)
         try:
+            music = ID3(var)
             val = music['TPE1'].text[0]
         except:
             val = 'artistnotfound'
     else:
-        music = mutagen.mp4.MP4(var)
         try:
+            music = mutagen.mp4.MP4(var)
             val = music['\xa9ART'][0]
         except:
             val = 'artistnotfound'
@@ -68,14 +68,14 @@ def get_artist(var):
 
 def get_genre(var):
     if re.search(r'mp3',var):
-        music = ID3(var)
         try:
+            music = ID3(var)
             val = music['TCON'].text[0]
         except:
             val = 'genrenotfound'
     else:
-        music = mutagen.mp4.MP4(var)
         try:
+            music = mutagen.mp4.MP4(var)
             val = music['\xa9gen'][0]
         except:
             val = 'genrenotfound'      
@@ -139,7 +139,7 @@ def getmusicattr(args):
         if args.title:
             if re.search(r'\b%s\b'%list2str(args.title),title,re.IGNORECASE):
                 if args.genre and get_nasty_genre(args, genre):
-                    if args.artist and get_nastry_artist(args, artist):
+                    if args.artist and get_nasty_artist(args, artist):
                         return mpath,title,artist
                     elif not args.artist:
                         return mpath,title,artist

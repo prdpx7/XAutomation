@@ -22,8 +22,10 @@ def scrape_dict(args):
     soup = get_soup(webdict+args)
     print soup.select('.head-entry')[0].get_text().replace('\n','').title()
     link = soup.select('.def-content')
+    ctr = 0
     for line in link:
-        print line.get_text().rstrip()
+        ctr += 1
+        print ctr,line.get_text().strip()
 
 #open website from google search result
 '''
